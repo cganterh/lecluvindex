@@ -9,6 +9,7 @@ verify_ssl = true
 coverage = "*"
 wheel = "*"
 twine = "*"
-"e1839a8" = {path = ".", editable = true}
+le = "*"
+"e1839a8" = {editable = true, path = "."}
 
 [packages]
