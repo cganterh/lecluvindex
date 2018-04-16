@@ -47,7 +47,7 @@ def handle_unhandled_exceptions(bot, chat_id):
     try:
         yield
 
-    except:
+    except Exception:
         logger.exception('Unhandled exception!')
         bot.sendMessage(chat_id=chat_id, text='Something went wrong!')
 
