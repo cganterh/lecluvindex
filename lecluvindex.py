@@ -173,6 +173,16 @@ def start_uv_index(bot, update, job_queue, args):
             bot.sendMessage(
                 chat_id=update.message.chat_id, text=error_message)
 
+        except ValueError as ve:
+            if 'invalid literal for int' in str(ve):
+                text = (
+                    'You seem to have entered a wrong integer number. Check '
+                    'that you are passing well formatted integers and that '
+                    'the parameters in the correct order (hour, minute, '
+                    'place).'
+                )
+
+                bot.send_message(update.message.chat_id, text)
 
             else:
                 raise
