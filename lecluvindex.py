@@ -1,5 +1,6 @@
 """Provide UV index reporting capabilities to Le bot."""
 
+
 from contextlib import contextmanager
 from datetime import time
 from logging import getLogger
@@ -130,7 +131,7 @@ def start_uv_index(bot, update, job_queue, args):
             place = args[2]
 
             if place not in places:
-                raise ValueError('invalid_place')
+                raise InvalidPlace
 
             job_queue.run_daily(
                 callback_uv_index,
@@ -161,17 +162,17 @@ def start_uv_index(bot, update, job_queue, args):
             else:
                 raise
 
-        except ValueError as ve:
-            if 'invalid_place' in str(ve):
-                error_message_template = (
-                    'You entered an invalid place. {valid_places_msg_fragment}'
-                )
+        except InvalidPlace:
+            error_message_template = (
+                'You entered an invalid place. {valid_places_msg_fragment}'
+            )
 
-                error_message = error_message_template.format(
-                    valid_places_msg_fragment=valid_places_msg_fragment)
+            error_message = error_message_template.format(
+                valid_places_msg_fragment=valid_places_msg_fragment)
 
-                bot.sendMessage(
-                    chat_id=update.message.chat_id, text=error_message)
+            bot.sendMessage(
+                chat_id=update.message.chat_id, text=error_message)
+
 
             else:
                 raise
@@ -200,3 +201,12 @@ start_handler = CommandHandler(
 
 stop_handler = CommandHandler(
     'stop_uvindex', stop_uv_index, pass_job_queue=True)
+
+
+class InvalidPlace(ValueError):
+    """Raise when the user enters an invalid place."""
+
+    def __init__(self, info=None):
+        """Initialize the error."""
+        message = 'An invalid place was passed.'
+        super().__init__(message + ' ' + info if info else message)
